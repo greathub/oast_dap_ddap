@@ -27,3 +27,18 @@ class Network:
     def __init__(self):
         self.links = []
         self.demands = []
+
+
+class Codon:
+    def __init__(self, value):
+        self.value = value
+
+
+class Gene:
+    def __init__(self):
+        self.codon = []
+
+
+class Chromosome:
+    def __init__(self):
+        self.genes = []
