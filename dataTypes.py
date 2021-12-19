@@ -32,7 +32,7 @@ class Network:
 
 
 class Codon:
-    def __init__(self, value, path):
+    def __init__(self, value, path: DemandPath):
         self.value = value
         self.path = path
 
@@ -80,5 +80,11 @@ class Criterion(enum.Enum):
 
 
 class Modes(enum.Enum):
-    DAP = 0
-    DDAP = 1
+    DAP = 'DAP'
+    DDAP = 'DDAP'
+
+
+class InputFiles(enum.Enum):
+    net4 = 'net4'
+    net12_1 = 'net12_1'
+    net12_2 = 'net12_2'
