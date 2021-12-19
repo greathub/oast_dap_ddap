@@ -138,7 +138,24 @@ class EvolutionAlgorithm:
         return first_child, second_child
 
     def mutate_population(self, population):
-        pass
+
+        for chromosome in population:
+            for gene in chromosome.genes:
+                if random.random() < self.mutation_probability:
+                    self.mutate_gene(gene)
+
+    def mutate_gene(self, gene):
+        if len(gene.codons) < 2:
+            return
+
+        first, second = random.randint(0, len(gene.codons) - 1), random.randint(0, len(gene.codons) - 1)
+
+        while gene.codons[first].value < 1 or first == second:
+            first, second = random.randint(0, len(gene.codons) - 1), random.randint(0, len(gene.codons) - 1)
+
+        gene.codons[first].value -= 1
+        gene.codons[second].value += 1
+        self.stop_criteria.mutations_passed += 1
 
     def dispose_population(self, population):
         pass
@@ -168,7 +185,6 @@ class EvolutionAlgorithm:
     def update_generation_metadata(self, start_time):
         self.stop_criteria.seconds_passed = (dt.now() - start_time).total_seconds()
         self.stop_criteria.generations_passed += 1
-        # TODO: Mutation passed criterion
 
     def run(self):
         fittest_chromosomes = FittestChromosome()
@@ -178,7 +194,6 @@ class EvolutionAlgorithm:
         fittest_chromosomes.append(copy.deepcopy(self.get_fittest_chromosome(population)), 0)
 
         while not self.should_stop():
-
             self.create_next_generation(population)
             self.mutate_population(population)
             self.dispose_population(population)
@@ -186,3 +201,4 @@ class EvolutionAlgorithm:
             self.update_generation_metadata(start_time)
 
             self.append_fittest_chromosome(population, fittest_chromosomes)
+
