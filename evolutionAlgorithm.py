@@ -158,7 +158,8 @@ class EvolutionAlgorithm:
         self.stop_criteria.mutations_passed += 1
 
     def dispose_population(self, population):
-        pass
+        population.sort(key=lambda x: x.cost)
+        population = population[0:self.population_size]
 
     def get_fittest_chromosome(self, population):
         fittest_chromosome: Chromosome = population[0]
