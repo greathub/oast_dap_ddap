@@ -49,6 +49,19 @@ class Chromosome:
         self.fitness_function = 0
 
 
+class FittestChromosome:
+    def __init__(self):
+        self.chromosomes = []
+        self.generations = []
+
+    def __getitem__(self):
+        return self
+
+    def append(self, chromosome, generation):
+        self.chromosomes.append(chromosome)
+        self.generations.append(generation)
+
+
 class StopCriteria:
     def __init__(self, criterion, threshold_value):
         self.criterion: Criterion = criterion
