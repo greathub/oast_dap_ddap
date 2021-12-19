@@ -1,5 +1,8 @@
+from datetime import datetime as dt
+from typing import List
 from dataTypes import Chromosome, Gene, Codon, StopCriteria, Criterion, Modes
 import random
+import copy
 
 
 class EvolutionAlgorithm:
@@ -8,7 +11,6 @@ class EvolutionAlgorithm:
         self.network = network
         self.population_size = population_size
         self.random_seed = random_seed
-        self.generation_counter = 0
         self.mode = mode
         self.cost_function = self.set_up_cost_function()
         self.stop_criteria = stop_criteria
@@ -93,13 +95,45 @@ class EvolutionAlgorithm:
     def dispose_population(self, population):
         pass
 
+    def get_fittest_chromosome(self, population):
+        fittest_chromosome: Chromosome = population[0]
+        for chromosome in population:
+            if chromosome.cost < fittest_chromosome.cost:
+                fittest_chromosome = chromosome
+
+        return fittest_chromosome
+
+    def append_fittest_chromosome(self, population, fittest_chromosomes):
+        fittest_chromosome = self.get_fittest_chromosome(population)
+        min_cost = fittest_chromosomes[0]
+
+        for chromosome in fittest_chromosomes:
+            if chromosome.cost < min_cost:
+                min_cost = chromosome.cost
+
+        if fittest_chromosome.cost < min_cost:
+            fittest_chromosomes.append(copy.deepcopy(fittest_chromosome))
+            self.stop_criteria.no_improvements_passed = 0
+        else:
+            self.stop_criteria.no_improvements_passed += 1
+
+    def update_generation_metadata(self, start_time):
+        self.stop_criteria.seconds_passed = (dt.now() - start_time).total_seconds()
+        self.stop_criteria.generations_passed += 1
+        # TODO: Mutation passed criterion
+
     def run(self):
+        fittest_chromosomes: List[Chromosome] = []
+        start_time = dt.now()
         random.seed(self.random_seed)
         population = self.initialize_population()
+        fittest_chromosomes.append(copy.deepcopy(self.get_fittest_chromosome(population)))
 
         while not self.should_stop():
-            self.generation_counter += 1
 
             self.create_new_population(population)
             self.mutate_population(population)
             self.dispose_population(population)
+
+            self.update_generation_metadata(start_time)
+
