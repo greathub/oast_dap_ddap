@@ -2,6 +2,7 @@ from datetime import datetime as dt
 from dataTypes import Chromosome, Gene, Codon, StopCriteria, Criterion, Modes, FittestChromosome
 import random
 import copy
+from math import ceil
 
 
 class EvolutionAlgorithm:
@@ -39,7 +40,15 @@ class EvolutionAlgorithm:
         chromosome.cost = max(link_overload_modules)
 
     def ddap_cost_function(self, chromosome: Chromosome):
-        pass
+        link_demands, link_cost = [0] * len(self.network.links), [0] * len(self.network.links)
+        for gene in chromosome.genes:
+            for codon in gene.codons:
+                for link in codon.path.link_list:
+                    link_demands[link - 1] += codon.value
+
+        for i, link in enumerate(self.network.links):
+            link_cost[i] = ceil(link_demands[i] / link.link_module) * link.module_cost
+        chromosome.cost = sum(link_cost)
 
     def initialize_population(self):
         population = []
