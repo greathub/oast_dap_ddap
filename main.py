@@ -2,7 +2,7 @@ from parser import *
 from evolutionAlgorithm import *
 from cmd import *
 
-POPULATION = 400
+POPULATION = 500
 RANDOM_SEED = 23452344
 MODE = Modes.DAP
 STOP = StopCriteria(Criterion.Generations, 500)
