@@ -85,6 +85,6 @@ class Modes(enum.Enum):
 
 
 class InputFiles(enum.Enum):
-    net4 = 'net4'
-    net12_1 = 'net12_1'
-    net12_2 = 'net12_2'
+    net4 = 1
+    net12_1 = 2
+    net12_2 = 3
