@@ -236,7 +236,8 @@ class EvolutionAlgorithm:
             self.save_chromosome_to_file(chromosome, generation)
 
     def save_chromosome_to_file(self, chromosome: Chromosome, generation):
-        log = "Generation: {}\nCost: {}\n".format(generation, chromosome.cost)
+        log = "Generation: {}\nCost: {}\nSeconds passed: {}"\
+            .format(generation, chromosome.cost, self.stop_criteria.seconds_passed)
         link_number = len(self.network.links)
         log += "{}\n\n".format(link_number)
         demands_of_links, modules_of_links = [0] * link_number, [0] * link_number
@@ -258,7 +259,7 @@ class EvolutionAlgorithm:
                 log += "\n{} {}".format(j+1, codon.value)
             log += "\n"
 
-        file_name = str(self.network_name.value) + str(self.mode.value) + '.txt'
+        file_name = 'output/' + str(self.network_name.name) + str(self.mode.value) + '.txt'
 
         with open(file_name, "a") as file:
             file.write(log)
